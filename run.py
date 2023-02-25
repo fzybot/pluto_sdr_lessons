@@ -17,14 +17,22 @@ import matplotlib.pyplot as plt
 # plt.scatter(x_real_data, y_imag_data )
 # plt.show()
 
-def initialize_pluto_sdr(ip_address):
-    sdr = adi.Pluto('ip:192.168.2.1')
-    sdr.sample_rate = int(2.5e6)
+pluto_sdr_default_settings = {
+    'ip_address': 'ip:192.168.2.1',
+    'sample_rate': int(2.5e6),
+}
+
+def initialize_pluto_sdr(config_dict):
+    ip = config_dict['ip_address']
+    sample_rate = config_dict['sample_rate']
+    
+    sdr = adi.Pluto(ip)
+    sdr.sample_rate = sample_rate
     print(sdr.sample_rate)
     return sdr
 
 if __name__ == '__main__':
     pluto_ip = 'ip:192.168.2.1'
-    sdr = initialize_pluto_sdr(pluto_ip)
+    sdr = initialize_pluto_sdr(pluto_sdr_default_settings)
     rx_data = sdr.rx()
     print("rx data length: ",len(rx_data))
