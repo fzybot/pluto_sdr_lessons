@@ -4,25 +4,10 @@ import matplotlib.pyplot as plt
 
 from matplotlib.animation import FuncAnimation
 
-# sdr = adi.Pluto('ip:192.168.2.1') # адрес PlutoSDR
-# sdr.sample_rate = int(2.5e6)
-# rx_data = sdr.rx()
-# ifft = np.fft.ifft(rx_data)
-# x_real_data = []
-# y_imag_data = []
-# print("rx data length: ",len(rx_data))
-# print(ifft)
-# for i in rx_data:
-#     x_real_data.append(i.real)
-#     y_imag_data.append(i.imag)
-    
-# plt.scatter(x_real_data, y_imag_data )
-# plt.show()
-
 rx_default_settings = {
     'ip_address': 'ip:192.168.2.1',
     'sample_rate': int(1e6),
-    'center_freq': 2412e6,
+    'center_freq': 2412e6, # центральная частота: 2412 [MHz] или 2.412 [GHz]
     'num_samp': 100000,
     'gain_control_mode_chan0': 'manual',
     'rx_hardwaregain_chan0':  0.0,
@@ -66,22 +51,22 @@ if __name__ == '__main__':
     y_1 = []
     fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(9, 9))
     x_limit = 100
-    y_limit = 1000
+    y_limit = 10
     
     def animate(i):
-        # for i in range (0, 10):
-        #     raw_data = sdr.rx()
+        # Для очищения буфера rx() от мусора
+        # TODO: проверить, мусор ли это или могут быть полезные данные.
+        for i in range (0, 10):
+            raw_data = sdr.rx()
         rx_data = sdr.rx()
         psd = np.abs(np.fft.fftshift(np.fft.fft(rx_data)))**2
         psd_dB = 10*np.log10(psd)
         f = np.linspace(sample_rate/-2, sample_rate/2, len(psd))
         ifft = np.abs(np.fft.ifft(rx_data))
-        for i in range(len(rx_data)):
-            x_0.append(i)
-            y_0.append(abs(rx_data[i]))
             
         axs[0, 0].clear()
-        axs[0, 0].plot(x_0, y_0)
+        axs[0, 0].plot(np.real(rx_data))
+        axs[0, 0].plot(np.imag(rx_data))
         axs[0, 0].set_xlim([0,x_limit])
         axs[0, 0].set_ylim([-y_limit,y_limit])
         x_0.clear()
