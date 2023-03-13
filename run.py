@@ -7,7 +7,7 @@ from matplotlib.animation import FuncAnimation
 rx_default_settings = {
     'ip_address': 'ip:192.168.2.1',
     'sample_rate': int(1e6),
-    'center_freq': 2412e6, # центральная частота: 2412 [MHz] или 2.412 [GHz]
+    'center_freq': 915e6, # центральная частота:916 [MHz] или 0.916 [GHz]
     'num_samp': 100000,
     'gain_control_mode_chan0': 'manual',
     'rx_hardwaregain_chan0':  0.0,
