@@ -56,27 +56,37 @@ if __name__ == '__main__':
     def animate(i):
         # Для очищения буфера rx() от мусора
         # TODO: проверить, мусор ли это или могут быть полезные данные.
-        for i in range (0, 10):
-            raw_data = sdr.rx()
+        #for i in range (0, 10):
+            #raw_data = sdr.rx()
         rx_data = sdr.rx()
-        psd = np.abs(np.fft.fftshift(np.fft.fft(rx_data)))**2
+        fft = np.fft.fft(rx_data)
+        psd = np.abs(np.fft.fftshift(fft))**2
         psd_dB = 10*np.log10(psd)
         f = np.linspace(sample_rate/-2, sample_rate/2, len(psd))
-        ifft = np.abs(np.fft.ifft(rx_data))
+        abs_fft = np.abs(fft)
             
         axs[0, 0].clear()
         axs[0, 0].plot(np.real(rx_data))
         axs[0, 0].plot(np.imag(rx_data))
+        axs[0, 0].title.set_text("sdr.rx() call")
         axs[0, 0].set_xlim([0,x_limit])
         axs[0, 0].set_ylim([-y_limit,y_limit])
         x_0.clear()
         y_0.clear()
         
+        axs[0, 1].clear()
+        axs[0, 1].scatter(np.real(rx_data), np.imag(rx_data), s=1)
+        axs[0, 1].title.set_text("sdr.rx() call in scatter view")
+        
         axs[1, 0].clear()
         axs[1, 0].plot(psd_dB)
+        axs[1, 0].title.set_text("psd_dB value for rx() call")
+        #axs[1, 0].set_ylim([0,100])
+        
         
         axs[1, 1].clear()
-        axs[1, 1].plot(ifft)
+        axs[1, 1].plot(abs_fft)
+        axs[1, 1].title.set_text("fft per rx call")
 
     
     # run the animation
