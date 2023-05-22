@@ -1,0 +1,4 @@
+/.ipynb_checkpoints
+*.code-workspace
+*/__pycache__
+/theoretical_materials
